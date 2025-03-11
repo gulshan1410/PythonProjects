@@ -1,0 +1,107 @@
+from tkinter import *
+from tkinter import ttk,messagebox
+from datetime import *
+
+root=Tk()
+root.title("Product price calculator")
+root.geometry("400x550+500+100")
+root.resizable(0,0)
+root.config(background="light gray")
+
+total=0
+product=StringVar(value="")
+nc=StringVar()
+price=StringVar(value="")
+quantity=StringVar(value="")
+crt=[]
+date=datetime.today().strftime("%d/%m/%y")
+
+products={"Laptop":45000,"Mouse":500,"Keyboard":1000,"RAM":2500,"SSD":2000}
+
+def add_to_cart():
+    sp=product.get()
+    qnt=int(quantity.get())
+    if sp in products:
+        up=products[sp]
+        tp=up*qnt
+        crt.append((sp,qnt,tp))
+        cart.insert(END,f"{sp}x{qnt}={tp}")
+        messagebox.showinfo("Success","Item added to cart")
+    update()
+def update():
+    global total
+    total=0
+
+    for item in crt:
+        total=total+item[2]
+    price.set(f"{total}")
+
+def Gen_bill():
+    global total
+    fn="D:\\python\\bill.txt"
+    noc=nc.get()
+    crtt=str(crt)
+    ttl=str(total)
+    with open(fn,"w") as file1:
+        file1.write(date+"\n"+"\n")
+        file1.write("Ara Computer Hub")
+        file1.write("\n"+"\n")
+        file1.write("Name of Customer:")
+        file1.write(noc+"\n"+"\n")
+        file1.write("Items Purchased :")
+        file1.write("\n"+"\n")
+        file1.write(crtt+"\n"+"\n")
+        file1.write("Amount payable:")
+        file1.write(ttl)
+        file1.write("\n")
+        file1.write("\n")
+        file1.write("Thank you!!")
+        file1.close()
+        messagebox.showinfo("Success","Bill generated sucessfully")
+
+lbb1=Label(root,text="Ara Computer Hub",font=("Algerian",25,"bold"),bg="red")
+lbb1.place(x=35,y=30)
+           
+llb1=Label(root,text=f"Date:{date}",font=("Arial",10,"bold"),bg="light yellow")
+llb1.place(x=8,y=9)
+
+lb1=Label(root,text="Name of Customer",font=("Arial",12,"bold"),bg="light blue")
+lb1.place(x=10,y=80)
+
+eb1=Entry(root,font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,textvariable=nc,width=20)
+eb1.place(x=170,y=80)
+
+l1=Label(root,text="Select Product ",font=("Arial",12,"bold"),bg="light blue")
+l1.place(x=10,y=130)
+
+pd = ttk.Combobox(root,textvariable=product,values=list(products.keys()),state="readonly",font=("Arial",12))
+pd.place(x=170,y=130)
+pd.current(0)
+
+l2=Label(root,text="Select Quantity",font=("Arial",12,"bold"),bg="light blue")
+l2.place(x=10,y=180)
+l=[str(i)for i in range(1,11)]
+pq=ttk.Combobox(root,textvariable=quantity,value=l,state="readonly",font=("Arial",12))
+pq.place(x=170,y=180)
+pq.current(0)
+
+bt1=Button(root,text="Add to Cart",font=("Arial",15,"bold"),width=12,bd=5,command=add_to_cart)
+bt1.place(x=120,y=230)
+
+ll2=Label(root,text="My Cart",font=("Arial",15,"bold"),bg="light blue")
+ll2.place(x=20,y=280)
+
+cart=Listbox(root,width=50,height=7,font=("Arial",10,"bold"))
+cart.place(x=20,y=310)
+
+l3=Label(root,text="Total price",font=("Algerian",20,"bold"),bg="light blue",bd=7)
+l3.place(x=10,y=440)
+
+p=Label(root,textvariable=price,font=("Algerian",25,"bold"),bg="light blue",fg="brown",width=8,height=1)
+p.place(x=200,y=440)
+
+bill=Button(root,text="Generate bill",font=("Algerian",20,"bold"),width=12,bd=5,command=Gen_bill)
+bill.place(x=80,y=480)
+
+root.mainloop()
+
