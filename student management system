@@ -1,0 +1,31 @@
+import mysql.connector as sql
+mycon=sql.connect(host="localhost",user="root",passwd="12345678",database="mynewdb")
+mycur=mycon.cursor()
+print("-----------------------------------------------------------------------------------------------------------")
+print("\t\tWelcome to hubnet student management system")
+print("-----------------------------------------------------------------------------------------------------------")
+ch=int(input("1.Press 1 for student management\n2.Press 2 for course management\nEnter your choice :"))
+if ch==1:
+    sch=int(input("1.Press 1 for new addmission\n2.Press2 for find student\n3.Press 3 for update student record\n4.Press 4 for delete student record\n5.Enter your choice :"))
+    if sch==1:
+        sid=input("Enter student id :")
+        sn=input("Enter name of student :")
+        sp=input("Enter phone no of student :")
+        dob=input("Enter date of birth :")
+        age=int(input("Enter age of student :"))
+        gen=input("Enter gender of student :")
+        cid=input("Enter course id of student :")
+        data=(sid,sn,sp,dob,age,gen,cid)
+        q="insert into student(sid,sname,phone,dob,age,gender,cid)values('{}','{}','{}','{}','{}','{}','{}')"
+        mycur.execute(q,data)
+        mycon.commit()
+        print("Record has been inserted!!")
+    elif sch==2:
+        sid=input("Enter student id :")
+        q="select * from student where sid='{}'".format(sid)
+        mycur.execute(q)
+        rec=mycur.fetchall()
+        print(rec)
+    
+
+        
